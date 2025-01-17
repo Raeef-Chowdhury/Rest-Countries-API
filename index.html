@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <h1 class="navbar__heading">Where In the World?</h1>
+        <div class="navbar__theme--box">
+          <ion-icon
+            name="moon-outline"
+            class="dark__icon theme__icon"
+          ></ion-icon>
+          <ion-icon
+            name="sunny-outline"
+            class="light__icon theme__icon none"
+          ></ion-icon>
+          <h2 class="theme__text">Dark Mode</h2>
+          <h2 class="theme__text none">Light Mode</h2>
+        </div>
+      </nav>
+    </header>
+    <main class="container">
+      <form class="filter__container">
+        <input
+          type="text"
+          placeholder="Search for any country..."
+          name="search"
+          id="search__country"
+          class="filter__country"
+        />
+        <select
+          name="regions"
+          id="regions"
+          placeholder="Filter by region"
+          class="filter__reigions"
+        >
+          <option value="placeholder">Filter by Region</option>
+          <option value="africa">Africa</option>
+          <option value="america">America</option>
+          <option value="asia">Asia</option>
+          <option value="europe">Europe</option>
+          <option value="oceania">Oceania</option>
+        </select>
+      </form>
+      <section class="countries">
+        <ul class="country__list">
+          <li class="country__item">
+            <div class="country__img--box">
+              <img
+                src="/Product-cart/image-baklava-desktop.jpg"
+                alt=""
+                srcset=""
+                class="country__img"
+              />
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </body>
+  <script src="script.js"></script>
+  <script
+    type="module"
+    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+  ></script>
+  <script
+    nomodule
+    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+  ></script>
+</html>
