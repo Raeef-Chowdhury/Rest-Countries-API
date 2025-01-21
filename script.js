@@ -13,8 +13,11 @@ const renderAllCountries = async () => {
   }
 };
 const displayCountries = (countries) => {
+  const sortedData = countries.sort((a, b) =>
+    a.name.common.localeCompare(b.name.common)
+  );
   countryList.innerHTML = ""; // Clear the list
-  countries.forEach((country) => {
+  sortedData.forEach((country) => {
     const countryItem = document.createElement("li");
     countryItem.innerHTML = `
           <img
@@ -59,4 +62,4 @@ searchBar.addEventListener("input", async function (e) {
   }
 });
 
-window.addEventListener("load", renderAllCountries);
+document.addEventListener("DOMContentLoaded", renderAllCountries);
