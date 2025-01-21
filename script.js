@@ -1,7 +1,14 @@
 const btn = document.querySelector(".dark__icon");
 const searchBar = document.querySelector(".filter__country");
 const countryList = document.querySelector(".country__list");
+const filterRegions = document.querySelector(".filter__reigions");
+const error = document.querySelector(".error__msg");
+const allCountriesFilter = document.querySelector(".all__countries--filter");
+const unitedNationFilter = document.querySelector(".united__nations--filter");
+const allCountriesText = document.querySelector(".all__countries--text");
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// DISPLAYING ENTIRE LIST OF COUNTRIES
 const renderAllCountries = async () => {
   try {
     const url = `https://restcountries.com/v3.1/all`;
@@ -16,7 +23,7 @@ const displayCountries = (countries) => {
   const sortedData = countries.sort((a, b) =>
     a.name.common.localeCompare(b.name.common)
   );
-  countryList.innerHTML = ""; // Clear the list
+  countryList.innerHTML = "";
   sortedData.forEach((country) => {
     const countryItem = document.createElement("li");
     countryItem.innerHTML = `
@@ -43,23 +50,53 @@ const displayCountries = (countries) => {
     countryList.appendChild(countryItem);
   });
 };
-// Add Filter Search
-searchBar.addEventListener("input", async function (e) {
+
+document.addEventListener("DOMContentLoaded", renderAllCountries);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//  FILTERING COUNTRIES
+const filterCountries = async () => {
   try {
-    const query = e.target.value.toLowerCase(); // Get user input
+    const query = searchBar.value.toLowerCase();
+    const selectedContinent = filterRegions.value.toLowerCase();
+    const isUnMember = unitedNationFilter.classList.contains("none");
+
     const url = `https://restcountries.com/v3.1/all`;
     const res = await fetch(url);
     const data = await res.json();
 
-    // Filter countries based on the search query
-    const filteredCountries = data.filter((country) =>
-      country.name.common.toLowerCase().includes(query)
-    );
+    // Apply filters
+    const filteredCountries = data.filter((country) => {
+      const matchesSearch = country.name.common.toLowerCase().includes(query);
+      const matchesRegion =
+        selectedContinent === "placeholder" ||
+        country.region.toLowerCase() === selectedContinent;
+      const matchesUn = !isUnMember || country.unMember === true;
 
-    displayCountries(filteredCountries); // Render filtered countries
+      return matchesSearch && matchesRegion && matchesUn;
+    });
+
+    displayCountries(filteredCountries);
+    if (filteredCountries.length < 1) {
+      error.classList.remove("none");
+    } else {
+      error.classList.add("none");
+    }
   } catch (err) {
     console.log(err);
   }
+};
+filterRegions.addEventListener("change", filterCountries);
+searchBar.addEventListener("input", filterCountries);
+allCountriesFilter.addEventListener("click", function () {
+  unitedNationFilter.classList.remove("none");
+  allCountriesFilter.classList.add("none");
+  allCountriesText.classList.add("none");
+  filterCountries();
 });
-
-document.addEventListener("DOMContentLoaded", renderAllCountries);
+unitedNationFilter.addEventListener("click", function () {
+  unitedNationFilter.classList.add("none");
+  allCountriesFilter.classList.remove("none");
+  allCountriesText.classList.remove("none");
+  filterCountries();
+});

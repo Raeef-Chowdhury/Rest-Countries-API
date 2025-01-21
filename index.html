@@ -14,6 +14,17 @@
     <header class="header">
       <nav class="navbar">
         <h1 class="navbar__heading">Where In the World?</h1>
+        <div class="country__status--filter">
+          <ion-icon name="earth" class="all__countries--filter"></ion-icon>
+          <p class="all__countries--text">EARTH</p>
+
+          <img
+            src="united-nations-black-logo-free-png-701751694705903trshf8whwc.png"
+            alt=""
+            srcset=""
+            class="united__nations--filter none"
+          />
+        </div>
         <div class="navbar__theme--box">
           <ion-icon
             name="moon-outline"
@@ -45,36 +56,18 @@
         >
           <option value="placeholder">Filter by Region</option>
           <option value="africa">Africa</option>
-          <option value="america">America</option>
+          <option value="americas">America</option>
           <option value="asia">Asia</option>
           <option value="europe">Europe</option>
           <option value="oceania">Oceania</option>
         </select>
       </form>
       <section class="countries">
-        <ul class="country__list">
-          <!-- <li class="country__item">
-            <img
-              src="/Product-cart/image-baklava-desktop.jpg"
-              alt=""
-              srcset=""
-              class="country__img"
-            />
-            <div class="country__item--information">
-              <h1 class="country__name">Grenada</h1>
-              <p class="country__item--info country__item--pop">
-                <span> Population: </span> 223123
-              </p>
-              <p class="country__item--info country__item--region">
-                <span> Region: </span> America
-              </p>
-              <p class="country__item--info country__item--cap">
-                <span> Capital: </span> Paris
-              </p>
-            </div>
-          </li> -->
-        </ul>
+        <ul class="country__list"></ul>
       </section>
+      <div class="error__msg none">
+        <p class="error__txt">There are no countries Avalaible!</p>
+      </div>
     </main>
   </body>
   <script src="script.js"></script>

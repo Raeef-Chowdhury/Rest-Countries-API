@@ -125,3 +125,46 @@ body {
   scale: 1.15;
   outline: 1rem solid black;
 }
+.error__msg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  border-radius: 1rem;
+  padding: 1.2rem 2.4rem;
+  font-size: 2.4rem;
+  color: white;
+  transition: all 0.6s;
+  text-align: center;
+  max-width: 45rem;
+  margin: 0 auto;
+  position: absolute;
+  animation: moveFromTop 1s;
+  top: 20%;
+  left: 37%;
+}
+.none {
+  display: none;
+  scale: 0;
+}
+@keyframes moveFromTop {
+  0% {
+    transform: translateY(-100rem);
+  }
+  100% {
+    transform: translateY(-0rem);
+  }
+}
+/* Country Filters Members */
+.country__status--filter {
+  font-size: 2.4rem;
+  padding-right: 9.6rem;
+}
+.united__nations--filter {
+  width: 9.6rem;
+  height: 9.6rem;
+}
+.all__countries--filter {
+  font-size: 7.2rem;
+}
