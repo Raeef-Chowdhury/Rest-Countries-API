@@ -6,6 +6,7 @@ const error = document.querySelector(".error__msg");
 const allCountriesFilter = document.querySelector(".all__countries--filter");
 const unitedNationFilter = document.querySelector(".united__nations--filter");
 const allCountriesText = document.querySelector(".all__countries--text");
+const filterContainer = document.querySelector(".filter__container");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// DISPLAYING ENTIRE LIST OF COUNTRIES
@@ -47,6 +48,10 @@ const displayCountries = (countries) => {
               </p>
             </div>`;
     countryItem.classList.add("country__item");
+    countryItem.addEventListener("click", () =>
+      renderCountryExtraInfo(country.name.common)
+    );
+
     countryList.appendChild(countryItem);
   });
 };
@@ -65,7 +70,6 @@ const filterCountries = async () => {
     const res = await fetch(url);
     const data = await res.json();
 
-    // Apply filters
     const filteredCountries = data.filter((country) => {
       const matchesSearch = country.name.common.toLowerCase().includes(query);
       const matchesRegion =
@@ -100,3 +104,84 @@ unitedNationFilter.addEventListener("click", function () {
   allCountriesText.classList.remove("none");
   filterCountries();
 });
+//////////////////////////////////////////////
+// Implementing further details country page
+const renderCountryExtraInfo = async (index) => {
+  const url = `https://restcountries.com/v3.1/name/${index}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const country = data[0];
+  filterContainer.classList.add("remove");
+  countryList.classList.add("none");
+  const coutnryExtra = document.querySelector(".country__extra");
+  const currencies = Object.values(country.currencies || {})
+    .map((c) => c.name)
+    .join(", ");
+  coutnryExtra.innerHTML = `
+        <img
+          class="country__extra--img"
+          src="${country.flags.svg}"
+        />
+        <div class="country__extra--information--box">
+          <h1 class="country__extra--heading">${data[0].name.common}</h1>
+          <div class="country__extra--information">
+            <p class="country__extra--info">
+              <span class="country__extra--span">Native Name:</span>
+           ${Object.values(data[0].name.nativeName)[0].common || N / A}
+            </p>
+            <p class="country__extra--info">
+              <span class="country__extra--span"> Population:</span>
+              ${country.population.toLocaleString()}
+            </p>
+            <p class="country__extra--info">
+              <span class="country__extra--span">Region:</span>
+              ${country.region}
+            </p>
+            <p class="country__extra--info">
+              <span class="country__extra--span">Sub Region:</span>
+                  ${country.subregion}
+            </p>
+            <p class="country__extra--info">
+              <span class="country__extra--span">Capital:</span>
+                  ${country.capital}
+            </p>
+            <p class="country__extra--info">
+              <span class="country__extra--span">Top Level Domain:</span>
+             
+              ${country.tld[0]}
+            </p>
+            <p class="country__extra--info">
+              <span class="country__extra--span">Currency:</span>
+        ${currencies}
+            </p>
+            <p class="country__extra--info">
+              <span class="country__extra--span">Languages:</span>
+              ${Object.values(data[0].languages)[0]}
+            </p>
+          </div>
+          <div class="country__extra--borders">
+            <p class="border__text">Border Countries:</p>
+            <ul class="border__country--list">
+            <p class="border__err">No Bordering Countries!</p>
+            </ul>
+          </div>
+        </div>`;
+  const countryBorderBox = document.querySelector(".border__country--list");
+  const borders = data[0].borders;
+  const borderingText = document.querySelector(".border__err");
+
+  borders.forEach((border) => {
+    const borderItem = document.createElement("li");
+    borderItem.classList.add("border__country");
+    borderItem.innerHTML = `${border}`;
+    countryBorderBox.appendChild(borderItem);
+    borderingText.classList.add("none");
+  });
+  const allBorderItems = document.querySelectorAll(".border__country");
+  allBorderItems.forEach((borderItem) => {
+    const text = document.querySelector(".border__country").textContent;
+    console.log(text);
+
+    borderItem.addEventListener("click", renderCountryExtraInfo(text));
+  });
+};
