@@ -111,7 +111,7 @@ const renderCountryExtraInfo = async (index) => {
   const res = await fetch(url);
   const data = await res.json();
   const country = data[0];
-  filterContainer.classList.add("remove");
+  filterContainer.classList.add("none");
   countryList.classList.add("none");
   const coutnryExtra = document.querySelector(".country__extra");
   const currencies = Object.values(country.currencies || {})
@@ -169,19 +169,28 @@ const renderCountryExtraInfo = async (index) => {
   const countryBorderBox = document.querySelector(".border__country--list");
   const borders = data[0].borders;
   const borderingText = document.querySelector(".border__err");
+  if (borders && borders.length > 0) {
+    const allCountriesRes = await fetch("https://restcountries.com/v3.1/all");
+    const allCountries = await allCountriesRes.json();
 
-  borders.forEach((border) => {
-    const borderItem = document.createElement("li");
-    borderItem.classList.add("border__country");
-    borderItem.innerHTML = `${border}`;
-    countryBorderBox.appendChild(borderItem);
-    borderingText.classList.add("none");
-  });
-  const allBorderItems = document.querySelectorAll(".border__country");
-  allBorderItems.forEach((borderItem) => {
-    const text = document.querySelector(".border__country").textContent;
-    console.log(text);
+    const borderCountries = borders.map((borderCode) => {
+      const borderCountry = allCountries.find(
+        (country) => country.cca3 === borderCode
+      );
+      return borderCountry ? borderCountry.name.common : borderCode;
+    });
+    borderCountries.forEach((border) => {
+      const borderItem = document.createElement("li");
+      const text = border;
+      console.log(text);
 
-    borderItem.addEventListener("click", renderCountryExtraInfo(text));
-  });
+      borderItem.classList.add("border__country");
+      borderItem.innerHTML = `${border}`;
+      countryBorderBox.appendChild(borderItem);
+      borderItem.addEventListener("click", () => renderCountryExtraInfo(text));
+      borderingText.classList.add("none");
+    });
+  } else {
+    borderingText.classList.remove("none");
+  }
 };
