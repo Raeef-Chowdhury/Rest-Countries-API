@@ -1,3 +1,10 @@
+:root {
+  --main-color: white;
+  --secondary-color: #333;
+  --text-color: black;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +19,7 @@ body {
   font-family: "Rubik", "sans-serif";
   line-height: 1;
   overflow-x: scroll;
-  background-color: white;
+  background-color: var(--main-color);
   scroll-behavior: smooth;
 }
 .none {
@@ -21,7 +28,8 @@ body {
 /* HEADER */
 .header {
   padding: 2rem;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+  box-shadow: var(--shadow-color) 0px 5px 15px;
+  color: var(--text-color);
 }
 .navbar {
   display: flex;
@@ -41,9 +49,11 @@ body {
 }
 .theme__icon {
   font-size: 1.8rem;
+  color: var(--text-color);
 }
 .theme__text {
   font-size: 2.2rem;
+  color: var(--text-color);
 }
 /* FILTER FORM */
 .filter__container {
@@ -56,11 +66,11 @@ body {
 .filter__country {
   padding: 1.2rem 1.8rem;
   outline: none;
-  border: 1px solid black;
+  border: 1px solid var(--text-color);
   border-radius: 1.2rem;
   font-size: 1.4rem;
   transition: all 0.6s;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+  box-shadow: var(--shadow-color) 0px 5px 15px;
 }
 .filter__country:hover {
   scale: 1.1;
@@ -71,7 +81,7 @@ body {
   border: 1px solid black;
   border-radius: 1.2rem;
   font-size: 1.4rem;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+  box-shadow: var(--shadow-color) 0px 5px 15px;
   transition: all 0.6s;
 }
 /* COUNTRY LIST */
@@ -89,7 +99,7 @@ body {
   width: 27rem;
   height: fit-content;
   list-style: none;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+  box-shadow: var(--shadow-color) 0px 5px 15px;
   border-radius: 1rem;
   overflow: hidden;
   padding-bottom: 1.2rem;
@@ -108,23 +118,23 @@ body {
   width: 100%;
 }
 .country__name {
-  color: black;
+  color: var(--text-color);
   font-weight: 700;
   font-size: 2.4rem;
   margin-bottom: 1.2rem;
 }
 .country__item--info {
   font-size: 1.6rem;
-  color: #333;
+  color: var(--secondary-color);
 }
 .country__item--info span {
   font-size: 1.8rem;
   font-weight: 500;
-  color: #444;
+  color: var(--secondary-color);
 }
 .country__item:hover {
   scale: 1.1;
-  outline: 1rem solid black;
+  outline: 1rem solid var(--text-color);
 }
 .error__msg {
   display: flex;
@@ -135,7 +145,7 @@ body {
   border-radius: 1rem;
   padding: 1.2rem 2.4rem;
   font-size: 2.4rem;
-  color: white;
+  color: var(--main-color);
   transition: all 0.6s;
   text-align: center;
   max-width: 45rem;
@@ -169,6 +179,7 @@ body {
     scale: 1;
   }
 }
+
 /* Country Filters Members */
 .country__status--filter {
   font-size: 2.4rem;
@@ -177,9 +188,11 @@ body {
 .united__nations--filter {
   width: 9.6rem;
   height: 9.6rem;
+  color: var(--text-color);
 }
 .all__countries--filter {
   font-size: 7.2rem;
+  color: var(--text-color);
 }
 /* COUNTYR EXTRA BOX */
 .country__extra {
@@ -188,10 +201,11 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12.8rem;
+  transition: all 0.6s;
 }
 .country__extra--img {
   width: 40rem;
-  box-shadow: 1.2rem 1.2rem 2.4rem 2.4rem rgba(0, 0, 0, 0.1);
+  box-shadow: 1.2rem 1.2rem 2.4rem 2.4rem var(--shadow-color);
 }
 .country__extra--heading {
   font-size: 3.2rem;
@@ -206,12 +220,12 @@ body {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 2.4rem;
   font-size: 1.6rem;
-  color: #333;
+  color: var(--secondary-color);
 }
 .country__extra--info span {
   font-size: 1.8rem;
   font-weight: 500;
-  color: black;
+  color: var(--text-color);
   margin-right: 0.6rem;
 }
 .country__extra--borders {
@@ -219,7 +233,7 @@ body {
 }
 .border__text {
   font-size: 1.8rem;
-  color: black;
+  color: var(--text-color);
 }
 .border__country--list {
   margin-top: 1.2rem;
@@ -231,8 +245,9 @@ body {
 .border__country {
   border-radius: 1rem;
   padding: 0.8rem 1.2rem;
-  border: 1px solid black;
+  border: 1px solid var(--text-color);
   font-size: 1.6rem;
+  color: var(--text-color);
 }
 main {
   padding-bottom: 12.8rem;
@@ -243,9 +258,10 @@ main {
 }
 .back__btn {
   padding: 1.2rem 2.4rem;
-  background: white;
-  box-shadow: 1.2rem 1.2rem 2.4rem 2.4rem rgba(0, 0, 0, 0.09);
-  border: none;
+  background: var(--main-color);
+  box-shadow: 1.2rem 1.2rem 2.4rem 2.4rem var(--shadow-color);
+  border: 1px solid (--text-color);
   font-size: 2.4rem;
   border-radius: 1.2rem;
+  color: var(--text-color);
 }

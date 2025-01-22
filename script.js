@@ -8,7 +8,42 @@ const unitedNationFilter = document.querySelector(".united__nations--filter");
 const allCountriesText = document.querySelector(".all__countries--text");
 const filterContainer = document.querySelector(".filter__container");
 const backBtn = document.querySelector(".back__btn");
+const darkModeBtn = document.querySelector(".dark__icon");
+const lightModeBtn = document.querySelector(".light__icon");
+const lightText = document.querySelector(".theme__text--light");
+const darkText = document.querySelector(".theme__text--dark");
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// theme switcher
+darkModeBtn.addEventListener("click", function () {
+  darkModeEnable();
+  darkModeBtn.classList.add("none");
+  lightModeBtn.classList.remove("none");
+  lightText.classList.remove("none");
+  darkText.classList.add("none");
+});
+lightModeBtn.addEventListener("click", function () {
+  lightModeEnable();
+  darkModeBtn.classList.remove("none");
+  lightModeBtn.classList.add("none");
+  lightText.classList.add("none");
+  darkText.classList.remove("none");
+});
+function darkModeEnable() {
+  const root = document.documentElement;
 
+  root.style.setProperty("--main-color", "white");
+  root.style.setProperty("--secondary-color", "#333");
+  root.style.setProperty("--text-color", "black");
+  root.style.setProperty("--shadow-color", "rgba(0, 0, 0, 0.2)");
+}
+function lightModeEnable() {
+  const root = document.documentElement;
+
+  root.style.setProperty("--main-color", "black");
+  root.style.setProperty("--secondary-color", "#ccc");
+  root.style.setProperty("--text-color", "white");
+  root.style.setProperty("--shadow-color", "rgba(255, 255, 255, 0.2)");
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// DISPLAYING ENTIRE LIST OF COUNTRIES
 const renderAllCountries = async () => {
@@ -115,6 +150,7 @@ const renderCountryExtraInfo = async (index) => {
   filterContainer.classList.add("none");
   countryList.classList.add("none");
   const coutnryExtra = document.querySelector(".country__extra");
+  coutnryExtra.classList.remove("none");
   const currencies = Object.values(country.currencies || {})
     .map((c) => c.name)
     .join(", ");
@@ -195,9 +231,13 @@ const renderCountryExtraInfo = async (index) => {
   } else {
     borderingText.classList.remove("none");
   }
+  coutnryExtra.style.transform = "translateX(0rem)";
 };
 backBtn.addEventListener("click", function () {
   filterContainer.classList.remove("none");
   countryList.classList.remove("none");
   backBtn.classList.add("none");
+  const coutnryExtra = document.querySelector(".country__extra");
+  coutnryExtra.classList.add("none");
+  renderAllCountries;
 });
