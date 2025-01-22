@@ -7,6 +7,7 @@ const allCountriesFilter = document.querySelector(".all__countries--filter");
 const unitedNationFilter = document.querySelector(".united__nations--filter");
 const allCountriesText = document.querySelector(".all__countries--text");
 const filterContainer = document.querySelector(".filter__container");
+const backBtn = document.querySelector(".back__btn");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// DISPLAYING ENTIRE LIST OF COUNTRIES
@@ -166,6 +167,7 @@ const renderCountryExtraInfo = async (index) => {
             </ul>
           </div>
         </div>`;
+  backBtn.classList.remove("none");
   const countryBorderBox = document.querySelector(".border__country--list");
   const borders = data[0].borders;
   const borderingText = document.querySelector(".border__err");
@@ -194,3 +196,8 @@ const renderCountryExtraInfo = async (index) => {
     borderingText.classList.remove("none");
   }
 };
+backBtn.addEventListener("click", function () {
+  filterContainer.classList.remove("none");
+  countryList.classList.remove("none");
+  backBtn.classList.add("none");
+});
