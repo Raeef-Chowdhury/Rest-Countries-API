@@ -259,9 +259,63 @@ main {
 .back__btn {
   padding: 1.2rem 2.4rem;
   background: var(--main-color);
-  box-shadow: 1.2rem 1.2rem 2.4rem 2.4rem var(--shadow-color);
   border: 1px solid (--text-color);
   font-size: 2.4rem;
   border-radius: 1.2rem;
   color: var(--text-color);
+}
+/* RESPONSIVE */
+@media (max-width: 760px) {
+  html {
+    font-size: 50%;
+  }
+  .countries {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .country__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6.4rem;
+  }
+  .country__extra {
+    display: block;
+    text-align: center;
+  }
+  .country__extra--img {
+    margin-bottom: 3.2rem;
+  }
+  .country__extra--information {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+    align-items: center;
+    justify-content: center;
+  }
+  .border__country--list {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+    align-items: center;
+    justify-content: center;
+  }
+  .countries {
+    position: relative;
+  }
+  .back__btn {
+    transform: translate(-5%, -50%);
+    position: absolute;
+  }
+  .responsive__height--none {
+    height: 0 !important;
+  }
+  .filter__container {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+    align-items: center;
+    justify-content: center;
+  }
 }

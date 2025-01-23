@@ -142,6 +142,7 @@ unitedNationFilter.addEventListener("click", function () {
 });
 //////////////////////////////////////////////
 // Implementing further details country page
+const countries = document.querySelector(".countries");
 const renderCountryExtraInfo = async (index) => {
   const url = `https://restcountries.com/v3.1/name/${index}`;
   const res = await fetch(url);
@@ -149,6 +150,7 @@ const renderCountryExtraInfo = async (index) => {
   const country = data[0];
   filterContainer.classList.add("none");
   countryList.classList.add("none");
+  countries.classList.add("responsive__height--none");
   const coutnryExtra = document.querySelector(".country__extra");
   coutnryExtra.classList.remove("none");
   const currencies = Object.values(country.currencies || {})
@@ -239,5 +241,6 @@ backBtn.addEventListener("click", function () {
   backBtn.classList.add("none");
   const coutnryExtra = document.querySelector(".country__extra");
   coutnryExtra.classList.add("none");
+  countries.classList.remove("responsive__height--none");
   renderAllCountries;
 });
