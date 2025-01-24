@@ -244,3 +244,23 @@ backBtn.addEventListener("click", function () {
   countries.classList.remove("responsive__height--none");
   renderAllCountries;
 });
+const imgTargets = document.querySelectorAll("img[data-src]");
+const loadImg = (entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.src = entry.target.dataset.src;
+
+      observer.unobserve(entry.target);
+    }
+  });
+};
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: "0px 0px -200px 0px",
+});
+
+// Observer multiple targets!
+imgTargets.forEach((img) => {
+  imgObserver.observe(img);
+});
