@@ -244,6 +244,8 @@ backBtn.addEventListener("click", function () {
   countries.classList.remove("responsive__height--none");
   renderAllCountries;
 });
+//////////////////////////////////////////////////////////////////////////
+// LAZY IMG LOADING
 const imgTargets = document.querySelectorAll("img[data-src]");
 const loadImg = (entries, observer) => {
   entries.forEach((entry) => {
@@ -260,7 +262,6 @@ const imgObserver = new IntersectionObserver(loadImg, {
   rootMargin: "0px 0px -200px 0px",
 });
 
-// Observer multiple targets!
 imgTargets.forEach((img) => {
   imgObserver.observe(img);
 });
