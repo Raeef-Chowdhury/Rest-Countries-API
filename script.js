@@ -48,7 +48,7 @@ function lightModeEnable() {
 /// DISPLAYING ENTIRE LIST OF COUNTRIES
 const renderAllCountries = async () => {
   try {
-    const url = `https://restcountries.com/v3.1/all`;
+    const url = `https://restcountries.com/v3.1/all?fields=name,flags,population,region,capital`;
     const res = await fetch(url);
     const data = await res.json();
     displayCountries(data);
@@ -100,9 +100,10 @@ const filterCountries = async () => {
   try {
     const query = searchBar.value.toLowerCase();
     const selectedContinent = filterRegions.value.toLowerCase();
-    const isUnMember = unitedNationFilter.classList.contains("none");
+    const showOnlyUnMembers = !unitedNationFilter.classList.contains("none"); // true when UN filter active
 
-    const url = `https://restcountries.com/v3.1/all`;
+    // Fetch all countries with UN membership info
+    const url = `https://restcountries.com/v3.1/all?fields=name,flags,population,region,capital,unMember`;
     const res = await fetch(url);
     const data = await res.json();
 
@@ -111,29 +112,36 @@ const filterCountries = async () => {
       const matchesRegion =
         selectedContinent === "placeholder" ||
         country.region.toLowerCase() === selectedContinent;
-      const matchesUn = !isUnMember || country.unMember === true;
+      const matchesUn = !showOnlyUnMembers || country.unMember === true;
 
       return matchesSearch && matchesRegion && matchesUn;
     });
 
     displayCountries(filteredCountries);
+
+    // Show/hide error message
     if (filteredCountries.length < 1) {
       error.classList.remove("none");
+      error.textContent = "No countries found.";
     } else {
       error.classList.add("none");
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
+
+// Event listeners
 filterRegions.addEventListener("change", filterCountries);
 searchBar.addEventListener("input", filterCountries);
+
 allCountriesFilter.addEventListener("click", function () {
   unitedNationFilter.classList.remove("none");
   allCountriesFilter.classList.add("none");
   allCountriesText.classList.add("none");
   filterCountries();
 });
+
 unitedNationFilter.addEventListener("click", function () {
   unitedNationFilter.classList.add("none");
   allCountriesFilter.classList.remove("none");
@@ -143,97 +151,98 @@ unitedNationFilter.addEventListener("click", function () {
 //////////////////////////////////////////////
 // Implementing further details country page
 const countries = document.querySelector(".countries");
-const renderCountryExtraInfo = async (index) => {
-  const url = `https://restcountries.com/v3.1/name/${index}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  const country = data[0];
-  filterContainer.classList.add("none");
-  countryList.classList.add("none");
-  countries.classList.add("responsive__height--none");
-  const coutnryExtra = document.querySelector(".country__extra");
-  coutnryExtra.classList.remove("none");
-  const currencies = Object.values(country.currencies || {})
-    .map((c) => c.name)
-    .join(", ");
-  coutnryExtra.innerHTML = `
-        <img
-          class="country__extra--img"
-          src="${country.flags.svg}"
-        />
-        <div class="country__extra--information--box">
-          <h1 class="country__extra--heading">${data[0].name.common}</h1>
-          <div class="country__extra--information">
-            <p class="country__extra--info">
-              <span class="country__extra--span">Native Name:</span>
-           ${Object.values(data[0].name.nativeName)[0].common || N / A}
-            </p>
-            <p class="country__extra--info">
-              <span class="country__extra--span"> Population:</span>
-              ${country.population.toLocaleString()}
-            </p>
-            <p class="country__extra--info">
-              <span class="country__extra--span">Region:</span>
-              ${country.region}
-            </p>
-            <p class="country__extra--info">
-              <span class="country__extra--span">Sub Region:</span>
-                  ${country.subregion}
-            </p>
-            <p class="country__extra--info">
-              <span class="country__extra--span">Capital:</span>
-                  ${country.capital}
-            </p>
-            <p class="country__extra--info">
-              <span class="country__extra--span">Top Level Domain:</span>
-             
-              ${country.tld[0]}
-            </p>
-            <p class="country__extra--info">
-              <span class="country__extra--span">Currency:</span>
-        ${currencies}
-            </p>
-            <p class="country__extra--info">
-              <span class="country__extra--span">Languages:</span>
-              ${Object.values(data[0].languages)[0]}
-            </p>
-          </div>
-          <div class="country__extra--borders">
-            <p class="border__text">Border Countries:</p>
-            <ul class="border__country--list">
-            <p class="border__err">No Bordering Countries!</p>
-            </ul>
-          </div>
-        </div>`;
-  backBtn.classList.remove("none");
-  const countryBorderBox = document.querySelector(".border__country--list");
-  const borders = data[0].borders;
-  const borderingText = document.querySelector(".border__err");
-  if (borders && borders.length > 0) {
-    const allCountriesRes = await fetch("https://restcountries.com/v3.1/all");
-    const allCountries = await allCountriesRes.json();
+const renderCountryExtraInfo = async (countryName) => {
+  try {
+    const url = `https://restcountries.com/v3.1/name/${countryName}?fullText=true`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const country = data[0];
 
-    const borderCountries = borders.map((borderCode) => {
-      const borderCountry = allCountries.find(
-        (country) => country.cca3 === borderCode
+    filterContainer.classList.add("none");
+    countryList.classList.add("none");
+    countries.classList.add("responsive__height--none");
+
+    const countryExtra = document.querySelector(".country__extra");
+    countryExtra.classList.remove("none");
+
+    // Currencies and languages
+    const currencies =
+      Object.values(country.currencies || {})
+        .map((c) => c.name)
+        .join(", ") || "N/A";
+
+    const languages =
+      Object.values(country.languages || {}).join(", ") || "N/A";
+
+    const nativeName =
+      Object.values(country.name.nativeName || {})[0]?.common || "N/A";
+
+    // Render main country info
+    countryExtra.innerHTML = `
+      <img class="country__extra--img" src="${country.flags.svg}" alt="${
+      country.name.common
+    } flag"/>
+      <div class="country__extra--information--box">
+        <h1 class="country__extra--heading">${country.name.common}</h1>
+        <div class="country__extra--information">
+          <p><span>Native Name:</span> ${nativeName}</p>
+          <p><span>Population:</span> ${country.population.toLocaleString()}</p>
+          <p><span>Region:</span> ${country.region}</p>
+          <p><span>Sub Region:</span> ${country.subregion || "N/A"}</p>
+          <p><span>Capital:</span> ${country.capital?.[0] || "N/A"}</p>
+          <p><span>Top Level Domain:</span> ${country.tld?.[0] || "N/A"}</p>
+          <p><span>Currency:</span> ${currencies}</p>
+          <p><span>Languages:</span> ${languages}</p>
+        </div>
+        <div class="country__extra--borders">
+          <p class="border__text">Border Countries:</p>
+          <ul class="border__country--list"></ul>
+          <p class="border__err">No Bordering Countries!</p>
+        </div>
+      </div>
+    `;
+
+    backBtn.classList.remove("none");
+
+    // Render borders
+    const countryBorderBox = document.querySelector(".border__country--list");
+    const borderingText = document.querySelector(".border__err");
+    countryBorderBox.innerHTML = ""; // clear previous borders
+
+    const borders = country.borders;
+    if (borders && borders.length > 0) {
+      const allCountriesRes = await fetch(
+        "https://restcountries.com/v3.1/all?fields=cca3,name"
       );
-      return borderCountry ? borderCountry.name.common : borderCode;
-    });
-    borderCountries.forEach((border) => {
-      const borderItem = document.createElement("li");
-      const text = border;
-      console.log(text);
+      const allCountries = await allCountriesRes.json();
 
-      borderItem.classList.add("border__country");
-      borderItem.innerHTML = `${border}`;
-      countryBorderBox.appendChild(borderItem);
-      borderItem.addEventListener("click", () => renderCountryExtraInfo(text));
-      borderingText.classList.add("none");
-    });
-  } else {
-    borderingText.classList.remove("none");
+      borders.forEach((borderCode) => {
+        const borderCountry = allCountries.find((c) => c.cca3 === borderCode);
+        const borderName = borderCountry
+          ? borderCountry.name.common
+          : borderCode;
+
+        const borderItem = document.createElement("li");
+        borderItem.classList.add("border__country");
+        borderItem.textContent = borderName;
+
+        borderItem.addEventListener("click", () =>
+          renderCountryExtraInfo(borderName)
+        );
+
+        countryBorderBox.appendChild(borderItem);
+      });
+
+      borderingText.classList.add("none"); // hide "No borders" text
+    } else {
+      borderingText.classList.remove("none"); // show if no borders
+    }
+
+    // Slide in effect
+    countryExtra.style.transform = "translateX(0rem)";
+  } catch (err) {
+    console.error("Failed to render country details:", err);
   }
-  coutnryExtra.style.transform = "translateX(0rem)";
 };
 backBtn.addEventListener("click", function () {
   filterContainer.classList.remove("none");
